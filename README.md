@@ -1,6 +1,7 @@
 # 🌐 JStitch
 
-**JStitch** is a powerful and user-friendly open-source web application designed to analyze, visualize, and manipulate JSON data. Whether you're debugging an API response, exploring complex data structures, or generating backend models — JStitch makes it fast and intuitive.
+<img src="https://github.com/kjagdeesh/JStitch/blob/master/src/img/logo.png" width=300/><br><br>
+**JStitch** is a powerful and user-friendly open-source web application designed to analyze, visualize, and manipulate JSON data. Whether you're debugging an API response, exploring complex data structures, or generating backend models - JStitch makes it fast and intuitive.
 
 ---
 
