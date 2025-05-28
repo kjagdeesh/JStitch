@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="JStitch is a powerful JSON analysis tool that lets you visualize, explore, and convert JSON data into tree views, tables, graphs, and C# models.">
+        <meta name="keywords" content="JSON, JSON viewer, JSON parser, JSON to C# model, JSON analyzer, online JSON tool, JSON formatter, JSON graph, JSON table, JSON tree view">
+        <meta name="author" content="Jagdeesh">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="index, follow">
+        <title>JStitch - Visualize, Model & Export</title>
+        <link rel="icon" href="img/tabicon.png" type="image/png">
+        <link rel="apple-touch-icon" sizes="180x180" href="img/tabicon.png">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <body>
+        <div class="sidebar" id="sidebar">
+            <span class="logo-parent" id="logo">
+                <img class="logo" src="img/logo.png" />
+            </span>
+            <span class="tab-logo-parent" id="TabLogo">
+                <img class="tab-logo" src="img/tabicon.png" />
+            </span>
+            <span class="toggle-btn" onclick="toggleSidebar()">
+                <i class="fa-solid fa-circle-chevron-right"></i>
+            </span>
+            <ul class="menu" id="menu">
+                <li class="menu-item" title="Enter JSON" onclick="showSection('input', this)">
+                    <i class="fas fa-edit"></i>
+                    <span>Enter JSON</span>
+                </li>
+                <li class="menu-item" title="View JSON" onclick="showSection('view', this)">
+                    <i class="fas fa-eye"></i>
+                    <span>View JSON</span>
+                </li>
+                <li class="menu-item" title="C# Model" onclick="showSection('csharp', this)">
+                    <i class="fas fa-code"></i>
+                    <span>C# Model</span>
+                </li>
+                <li class="menu-item" title="Tree Structure" onclick="showSection('tree', this)">
+                    <i class="fa-solid fa-folder-tree"></i>
+                    <span>Tree Structure</span>
+                </li>
+                <li class="menu-item" title="Graph View" onclick="showSection('graph', this)">
+                    <i style="transform: rotate(-90deg);" class="fas fa-sitemap"></i>
+                    <span>Graph View</span>
+                </li>
+                <li class="menu-item" title="Table View" onclick="showSection('tableView', this)">
+                    <i class="fa-solid fa-table"></i>
+                    <span>Table View</span>
+                </li>
+                <li class="menu-item" title="Beautify / Format" onclick="showSection('format', this)">
+                    <i class="fa-solid fa-laptop-code"></i>
+                    <span>Beautify / Format</span>
+                </li>
+                <li class="menu-item" title="Minify" onclick="showSection('minify', this)">
+                    <i class="fa-solid fa-file-code"></i>
+                    <span>Minify</span>
+                </li>
+                <li class="menu-item" title="Size Details" onclick="showSection('sizeDetails', this)">
+                    <i class="fa-solid fa-database"></i>
+                    <span>Size Details</span>
+                </li>
+            </ul>
+        </div>
+        <div class="content">
+            <div id="input">
+                <h2 class="stylish-heading">Enter JSON Data</h2>
+                <textarea id="jsonInput" placeholder='Enter your JSON data here...'></textarea>
+                <!-- <button onclick="processJSON()">Process</button> -->
+            </div>
+            <div id="view" class="hidden">
+                <h2 class="stylish-heading">JSON View</h2>
+                <div id="jsonViewer" class="json-viewer"></div>
+            </div>
+            <!-- <div id="view" class="hidden"><div id="jsonViewer" class="json-viewer"></div></div> -->
+            <div id="csharp" class="hidden">
+                <h2 class="stylish-heading">C# Model</h2>
+                <!-- <pre id="csharpModel"></pre> -->
+                <pre class="csharp-code tree-area">
+												<i id="copyIcon" class="fas fa-copy copy-icon" title="Copy to clipboard" onclick="copyCSharpModel()"></i>
+												<span id="copyStatus" class="copy-status-text hidden">Copied ✓</span>
+												<pre id="csharp-output"></pre>
+                </pre>
+            </div>
+            <div id="tree" class="hidden">
+                <h2 class="stylish-heading">JSON Tree Structure</h2>
+                <div class="csharp-code tree-area">
+                    <i id="copyIconJSONTree" class="fas fa-copy copy-icon" title="Copy to clipboard" onclick="copyJSONTree()"></i>
+                    <span id="copyStatusJSONTree" class="copy-status-text hidden">Copied ✓</span>
+                    <div id="jsonTree"></div>
+                </div>
+            </div>
+            <div id="graph" class="hidden">
+                <h2 class="stylish-heading">JSON Graph View</h2>
+                <div class="csharp-code tree-area">
+                    <!-- <i id="copyIconJSONTree" class="fas fa-copy copy-icon" title="Copy to clipboard" onclick="copyJSONTree()"></i><span id="copyStatusJSONTree" class="copy-status-text hidden">Copied ✓</span> -->
+                    <div style="margin-bottom: 12px;">
+                        <button class="export-btn" onclick="expandAll()" style="margin-right:8px;">
+                            <i style="transform: rotate(-90deg);" class="fas fa-sitemap"></i>Expand All </button>
+                        <button class="export-btn" onclick="collapseAll()" style="margin-right:8px;">
+                            <i class="fa-solid fa-circle-dot"></i>Collapse All </button>
+                        <button class="export-btn" onclick="downloadSVG()" style="margin-right:8px;">
+                            <i class="fa-solid fa-vector-square"></i>Download SVG </button>
+                        <button class="export-btn" onclick="downloadPNG()">
+                            <i class="fa-regular fa-image"></i>Download PNG </button>
+                    </div>
+                    <div id="json-graph"></div>
+                </div>
+            </div>
+            <div id="tableView" class="hidden">
+                <h2 class="stylish-heading">Table View</h2>
+                <div class="table-area">
+                    <div>
+                        <button class="export-btn" onclick="exportToCSV()">
+                            <i class="fa-solid fa-file-csv"></i> Export to CSV </button>
+                        <button class="export-btn" onclick="clearAllFilters()">
+                            <i class="fa-solid fa-eraser"></i> Clear All Filters </button>
+                    </div>
+                    <div id="table-container"></div>
+                </div>
+            </div>
+            <div id="sizeDetails" class="hidden">
+                <h2 class="stylish-heading">Size Details</h2>
+                <div class="csharp-code formated-json-area">
+                    <i id="copyIconJSONSize" class="fas fa-copy copy-icon" title="Copy to clipboard" onclick="copyJSONSize()"></i>
+                    <span id="copyStatusJSONSize" class="copy-status-text hidden">Copied ✓</span>
+                    <div id="sizeDetailsData"></div>
+                </div>
+            </div>
+            <div id="format" class="hidden">
+                <h2 class="stylish-heading">Beautify JSON</h2>
+                <div class="csharp-code formated-json-area">
+                    <i id="copyIconJSONData" class="fas fa-copy copy-icon" title="Copy to clipboard" onclick="copyJSONData()"></i>
+                    <span id="copyStatusJSONData" class="copy-status-text hidden">Copied ✓</span>
+                    <div id="formattedJson"></div>
+                </div>
+            </div>
+            <div id="minify" class="hidden">
+                <h2 class="stylish-heading">Minify JSON</h2>
+                <div class="csharp-code formated-json-area">
+                    <i id="copyIconJSONminified" class="fas fa-copy copy-icon" title="Copy to clipboard" onclick="copyMinifiedJSONData()"></i>
+                    <span id="copyStatusJSONminified" class="copy-status-text hidden">Copied ✓</span>
+                    <div id="minifiedJson"></div>
+                </div>
+            </div>
+        </div>
+        <div class="popup-wrapper" id="errorPopup">
+            <div class="popup-box">
+                <div class="popup-icon">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div class="popup-title">Error</div>
+                <div class="popup-message" id="popupMessage"> Something went wrong while processing your JSON. <br> Please check your input and try again. </div>
+                <button class="popup-btn" onclick="closePopup()">Try again</button>
+            </div>
+        </div>
+        <script src="js/lib/d3js.js"></script>
+        <script src="js/script.js"></script>
+    </body>
+</html>
